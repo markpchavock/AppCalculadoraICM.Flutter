@@ -1,18 +1,18 @@
-import 'package:appcalculoimc/model/imc.dart';
 import 'package:appcalculoimc/shared/widgets/text_label.dart';
 import 'package:flutter/material.dart';
-import 'repositories/calc_imc_repository.dart';
+import '../model/imc_sqflite_model.dart';
+import '../repositories/sqflite/sqflite_imc_repository.dart';
 
 class ImcPage extends StatefulWidget {
   const ImcPage({super.key});
 
   @override
-  State<ImcPage> createState() => _TarefaPageState();
+  State<ImcPage> createState() => _ImcPageState();
 }
 
-class _TarefaPageState extends State<ImcPage> {
-  var _calculosIMC = <Imc>[];
-  var imcRepository = ImcRepository();
+class _ImcPageState extends State<ImcPage> {
+  var _calculosIMC = <ImcSqfliteModel>[];
+  var imcRepository = ImcSQLiteRepository();
   var nomeController = TextEditingController();
   var pesoController = TextEditingController();
   var alturaController = TextEditingController();
@@ -25,7 +25,7 @@ class _TarefaPageState extends State<ImcPage> {
   }
 
   void obterTarefas() async {
-    _calculosIMC = await imcRepository.listar();
+    _calculosIMC = await imcRepository.obterDados();
     setState(() {});
   }
 
@@ -105,10 +105,18 @@ class _TarefaPageState extends State<ImcPage> {
                                   alturaSTR = alturaController.text;
                                   double? alturaDBL =
                                       double.tryParse(alturaSTR);
-                                  resultadoCalculo = imcRepository.calculoIMC(
-                                      pesoDBL!, alturaDBL!)!;
-                                  await imcRepository.adicionar(Imc(
-                                      nomeController.text, alturaDBL, pesoDBL));
+
+                                  if (pesoDBL != null && alturaDBL != null) {
+                                    resultadoCalculo = imcRepository.calculoIMC(
+                                        pesoDBL, alturaDBL)!;
+                                    await imcRepository.salvar(
+                                      ImcSqfliteModel(0, nomeController.text,
+                                          alturaDBL, pesoDBL),
+                                    );
+                                    // Atualizar a lista de cálculos
+                                    obterTarefas();
+                                  }
+
                                   // ignore: use_build_context_synchronously
                                   Navigator.pop(context);
                                   Divider();
@@ -140,10 +148,16 @@ class _TarefaPageState extends State<ImcPage> {
                       var imc = _calculosIMC[index];
                       return Dismissible(
                         onDismissed: (DismissDirection dismissDirection) async {
-                          await imcRepository.remover(imc.id);
-                          obterTarefas();
+                          final removedItem = _calculosIMC[index];
+                          await imcRepository.remover(removedItem.id);
+                          setState(() {
+                            _calculosIMC.removeAt(index);
+                          });
+
+                          // imcRepository.remover(imc.id);
+                          // obterTarefas();
                         },
-                        key: Key(imc.id),
+                        key: Key(imc.nome),
                         child: Card(
                           margin: EdgeInsets.symmetric(
                               horizontal: 10, vertical: 10),
@@ -156,9 +170,12 @@ class _TarefaPageState extends State<ImcPage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Altura: ${alturaController.text} m"),
-                                Text("Peso: ${pesoController.text} Kgs"),
-                                Text(resultadoCalculo.toString())
+                                Text(
+                                    "Altura: ${imc.altura.toStringAsFixed(2)} m"),
+                                Text(
+                                    "Peso: ${imc.peso.toStringAsFixed(2)} Kgs"),
+                                Text(
+                                    "Diagnóstico: ${imcRepository.calculoIMC(imc.peso, imc.altura) ?? ''}"),
                               ],
                             ),
                           ),

@@ -1,24 +1,6 @@
-
-import 'package:appcalculoimc/imc_page.dart';
+import 'package:appcalculoimc/pages/imc_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(textTheme: GoogleFonts.interTextTheme()),
-      home: const OpeningPage(),
-    );
-  }
-}
 
 class OpeningPage extends StatefulWidget {
   const OpeningPage({super.key});
@@ -86,12 +68,13 @@ class _OpeningPageState extends State<OpeningPage>
               margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
               padding: const EdgeInsets.all(30),
               decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 180, 228, 240),
+                  color: const Color.fromARGB(255, 226, 238, 241),
                   border: Border.all(),
                   borderRadius: BorderRadius.circular(30),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black
+                          // ignore: deprecated_member_use
                           .withOpacity(1), // Cor da sombra com opacidade
                       offset: const Offset(4,
                           4), // Deslocamento da sombra (horizontal, vertical)
