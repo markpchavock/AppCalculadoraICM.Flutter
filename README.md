@@ -1,16 +1,19 @@
-# appcalculoimc
+#App para calculos de índice de massa corporal
 
-A new Flutter project.
+![image](https://github.com/user-attachments/assets/de5ae946-cd8a-4ade-9f05-1bf97db2783f)
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+O projeto foi desenvolvido para fornecer ao usuário a resolução de seu calculo IMC.
 
-A few resources to get you started if this is your first Flutter project:
+Tecnologias utilizadas:
+-Dart
+-Flutter
+-VS Code
+-Android Studio
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Pacotes de destaque:
+-Google fonts - diversas fontes disponiveis;
+-animated_text_kit - utilizado para animar o botão "clique aqui" da pagina inicial;
+-font_awesome_flutter - diversos icones disponiveis;
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
